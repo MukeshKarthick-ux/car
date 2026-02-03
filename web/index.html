@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Dodge Game - Ultimate Racing Challenge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏎️ CAR DODGE GAME 🏎️</h1>
+            <p class="subtitle">Dodge obstacles and survive as long as you can!</p>
+        </div>
+
+        <!-- Game Stats -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label">Score:</span>
+                <span class="stat-value" id="score">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="level">1</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Status:</span>
+                <span class="stat-value" id="status">PLAYING</span>
+            </div>
+        </div>
+
+        <!-- Game Canvas Area -->
+        <div class="game-wrapper">
+            <div id="gameCanvas" class="game-canvas">
+                <!-- Player Car -->
+                <div id="player" class="player">
+                    <div class="car-body"></div>
+                    <div class="car-window"></div>
+                </div>
+
+                <!-- Obstacles Container -->
+                <div id="obstacles-container" class="obstacles-container"></div>
+
+                <!-- Game Over Screen -->
+                <div id="gameOverScreen" class="game-over-screen hidden">
+                    <div class="game-over-content">
+                        <h2>GAME OVER!</h2>
+                        <p class="final-score" id="finalScore">Final Score: 0</p>
+                        <p class="final-level" id="finalLevel">Level Reached: 1</p>
+                        <button class="btn-restart" onclick="restartGame()">PLAY AGAIN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Info -->
+        <div class="controls-info">
+            <p>Use <strong>LEFT</strong> and <strong>RIGHT</strong> arrow keys to move</p>
+            <p>Or click the <strong>A</strong> and <strong>D</strong> buttons below</p>
+        </div>
+
+        <!-- Mobile Controls -->
+        <div class="mobile-controls">
+            <button class="control-btn btn-left" 
+                    onmousedown="buttonLeftDown()" 
+                    onmouseup="buttonLeftUp()"
+                    ontouchstart="buttonLeftDown()"
+                    ontouchend="buttonLeftUp()"
+                    onmouseleave="buttonLeftUp()">⬅️ LEFT</button>
+            <button class="control-btn btn-right" 
+                    onmousedown="buttonRightDown()" 
+                    onmouseup="buttonRightUp()"
+                    ontouchstart="buttonRightDown()"
+                    ontouchend="buttonRightUp()"
+                    onmouseleave="buttonRightUp()">RIGHT ➡️</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🎮 Made with ❤️ | Dodge, Survive, Score!</p>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
