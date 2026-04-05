@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Compliance Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Policy Compliance Checker</h1>
+        <p>Enter a detailed description of an action you want to check for compliance with company policies.</p>
+
+        <form class="query-form" method="POST">
+            <h2>Check Action Compliance</h2>
+            <div class="form-group">
+                <label for="action">Describe the action you want to check:</label>
+                <textarea id="action" name="action" rows="6" placeholder="Example: I want to work from home next Tuesday to attend a family event..." required>{{ action }}</textarea>
+            </div>
+            <button type="submit">🔍 Check Compliance</button>
+        </form>
+
+        {% if result %}
+        <div class="result {% if 'NON-COMPLIANT' in result %}non-compliant{% else %}compliant{% endif %}">
+            <h3>📋 Compliance Check Result:</h3>
+            <pre>{{ result }}</pre>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error-message">
+            <h3>❌ Error:</h3>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 40px; color: #666;">
+            <p>💡 <strong>Tip:</strong> Be specific in your action description for more accurate compliance checking.</p>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a class="logout-btn" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

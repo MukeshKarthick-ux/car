@@ -1,0 +1,3 @@
+# Placeholder for policies.pdf
+# Please replace this with the actual company policy documents in PDF format.
+# The RAG pipeline will use this document to check compliance of user-described actions.

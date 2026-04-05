@@ -1,267 +1,125 @@
-# 🏎️ Car Dodge Game
+# Policy Compliance Checker
 
-A beautiful, interactive car racing game built with HTML5, CSS3, JavaScript, and Java backend logic. Dodge obstacles, survive as long as you can, and climb the levels!
+A comprehensive web application that uses Retrieval-Augmented Generation (RAG) to check if user-described actions comply with company policy documents.
 
 ## Features
 
-✨ **Beautiful UI**
-- Modern gradient design with smooth animations
-- Responsive layout that works on desktop and mobile
-- Animated player car and obstacles
-- Real-time score and level display
-
-🎮 **Engaging Gameplay**
-- Progressive difficulty with level system
-- Obstacle avoidance mechanic
-- Collision detection
-- Dynamic speed increase per level
-- Score multiplier based on level
-
-⚙️ **Technical Stack**
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Backend**: Java with built-in HTTP Server
-- **Communication**: REST API with JSON
+- **RAG Pipeline**: AI-powered compliance checking using LangChain and OpenAI
+- **Simple API**: Easy-to-run backend with a single `/check` endpoint
+- **Frontend UI**: Flask-based dashboard that posts user actions to the backend
+- **Vector DB**: FAISS store generated from the policy PDF
 
 ## Project Structure
 
 ```
-CarGame/
-├── src/
-│   ├── GameEngine.java      # Core game logic & collision detection
-│   └── GameServer.java      # HTTP server & API endpoints
-├── web/
-│   ├── index.html           # Game UI
-│   ├── style.css            # Beautiful styling
-│   └── game.js              # Frontend game controller
-├── out/                     # Compiled Java files
-├── run.bat                  # Quick start script
-└── README.md               # This file
+policy-compliance-checker/
+├── backend/
+│   ├── main.py              # FastAPI server with authentication and compliance API
+│   ├── rag_pipeline.py      # RAG pipeline implementation
+│   ├── prompt.py            # AI prompts for compliance checking
+│   ├── auth.py              # JWT authentication utilities
+│   ├── requirements.txt     # Backend dependencies
+│   ├── data/
+│   │   └── policies.pdf     # Company policy documents (replace placeholder)
+│   └── vectorstore/         # FAISS vector database
+└── frontend/
+    ├── app.py               # Flask web application
+    ├── requirements.txt     # Frontend dependencies
+    ├── templates/
+    │   ├── login.html       # Login page
+    │   └── dashboard.html   # Main dashboard with compliance checker
+    └── static/
+        └── css/
+            └── style.css    # Dark theme styles
 ```
 
-## How to Run
+## Setup Instructions
 
 ### Prerequisites
-- Java JDK 8 or higher
-- Any modern web browser
+- Python 3.8+
+- OpenAI API key
 
-### Quick Start (Windows)
-
-1. **Navigate to the project folder**:
-   ```cmd
-   cd path\to\CarGame
+### Backend Setup
+1. Navigate to the backend directory:
+   ```bash
+   cd policy-compliance-checker/backend
    ```
 
-2. **Run the game**:
-   ```cmd
-   run.bat
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
    ```
 
-   Or manually compile and run:
-   ```cmd
-   javac -d out src\GameEngine.java src\GameServer.java
-   java -cp out GameServer
+3. Set environment variables:
+   ```bash
+   export OPENAI_API_KEY="your-openai-api-key"
    ```
 
-3. **Open your browser**:
-   - Navigate to: `http://localhost:8000`
-   - The game will start automatically!
+4. Place your company policy document as `data/policies.pdf`
 
-### Manual Compilation (All Platforms)
+5. Run the backend server:
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-```bash
-# Navigate to project directory
-cd CarGame
+### Frontend Setup
+1. Navigate to the frontend directory:
+   ```bash
+   cd policy-compliance-checker/frontend
+   ```
 
-# Create output directory
-mkdir out
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# Compile Java files
-javac -d out src/GameEngine.java src/GameServer.java
+3. Run the frontend server:
+   ```bash
+   python app.py
+   ```
 
-# Run the server
-java -cp out GameServer
+## Usage
 
-# Open browser to http://localhost:8000
-```
+1. Open your browser and go to `http://localhost:5000`
+2. Login with username: `admin`, password: `admin123`
+3. Enter a description of an action you want to check for compliance
+4. Click "Check Compliance" to get an AI-powered analysis
 
-## How to Play
+## Testing Examples
 
-- **Move Left**: Press `Left Arrow` or `A` key
-- **Move Right**: Press `Right Arrow` or `D` key
-- **Mobile**: Use the LEFT and RIGHT buttons on screen
+Try these sample actions to test the compliance checker:
 
-### Objective
-- Dodge the incoming obstacles (yellow boxes with ⚠️)
-- Survive as long as possible
-- Earn points for each obstacle passed
-- Advance through levels to increase difficulty
+### ✅ Compliant Actions:
+- "I need to work overtime this weekend to finish an important project"
+- "I want to request vacation time for next month"
+- "I need to attend a professional development conference"
 
-### Scoring System
-- Base points per obstacle: 10 points
-- Level bonus: +5 points per level
-- Level up requirement: 100 points × current level
+### ❌ Non-Compliant Actions:
+- "I want to work from home tomorrow without asking my manager"
+- "I want to install unauthorized software on my work computer"
+- "I want to post company information on my personal social media"
 
-## Game Mechanics
+### 🤔 Edge Cases:
+- "I need to share a client contact with a colleague"
+- "I want to use company email for personal matters"
+- "I need to handle confidential documents"
 
-### Collision Detection
-- Uses AABB (Axis-Aligned Bounding Box) collision detection
-- Pixel-perfect collision with obstacles
-- Game ends on collision
+## API Documentation
 
-### Difficulty Progression
-- **Level 1**: 5 pixels/frame obstacle speed, 3 obstacles
-- **Level 2+**: Speed increases by 1 pixel/frame per level
-- Smooth difficulty curve for better gameplay
+The backend provides a REST API. Key endpoints:
 
-### Player Mechanics
-- Player speed: 15 pixels per movement input
-- Bounded movement within game area
-- Smooth hover animation for visual appeal
+- `POST /check`: Check action compliance
+- `GET /init`: Build the vector store from `backend/data/policies.pdf`
 
-## API Endpoints
+## Security Notes
 
-The Java server provides these REST endpoints:
+- Change the default admin credentials in production
+- Use environment variables for secrets
+- Implement proper user management for multiple users
+- Add HTTPS in production
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/` | GET | Serves static HTML/CSS/JS files |
-| `/api/gameState` | GET | Returns current game state (JSON) |
-| `/api/movePlayer` | GET | Moves player (query: `?direction=-1` or `1`) |
-| `/api/updateGame` | GET | Updates game logic (obstacles movement, collision) |
-| `/api/resetGame` | GET | Resets the game to initial state |
+## Technologies Used
 
-### Game State JSON Format
-```json
-{
-  "playerX": 175,
-  "playerY": 520,
-  "score": 100,
-  "level": 2,
-  "gameOver": false,
-  "gameWidth": 400,
-  "gameHeight": 600,
-  "obstacles": [
-    {"x": 50, "y": 100},
-    {"x": 150, "y": 200},
-    {"x": 300, "y": 300}
-  ]
-}
-```
-
-## Code Highlights
-
-### GameEngine.java
-- **Responsibility**: Core game logic
-- **Key Methods**:
-  - `movePlayer(direction)`: Handles player movement
-  - `updateGame()`: Main game loop logic
-  - `checkCollision()`: AABB collision detection
-  - `checkLevelUp()`: Level progression system
-
-### GameServer.java
-- **Responsibility**: HTTP server and API handling
-- **Key Handlers**:
-  - `StaticFileHandler`: Serves web files
-  - `GameStateHandler`: Returns game state
-  - `MovePlayerHandler`: Processes player movement
-  - `UpdateGameHandler`: Processes game updates
-  - `ResetGameHandler`: Resets game state
-
-### game.js
-- **Responsibility**: Frontend game controller
-- **Key Functions**:
-  - `fetchGameState()`: Gets current game state
-  - `renderGame()`: Updates DOM based on state
-  - `gameLoop()`: Main browser-side game loop
-  - Event handlers for keyboard/button input
-
-## Customization
-
-### Change Game Difficulty
-Edit `GameEngine.java`:
-```java
-// Modify initial obstacle speed (line ~35)
-this.obstacleSpeed = 8;  // Increase for harder game
-
-// Modify player speed (line ~34)
-this.playerSpeed = 20;  // Increase for faster movement
-
-// Modify obstacle count (line ~32)
-this.obstacleCount = 5;  // More obstacles = harder
-```
-
-### Change Game Colors
-Edit `style.css`:
-```css
-/* Modify player car color (line ~200) */
-.car-body {
-    background: linear-gradient(135deg, #00FF00, #00AA00);
-}
-
-/* Modify obstacle color (line ~280) */
-.obstacle {
-    background: linear-gradient(135deg, #FF0000, #AA0000);
-}
-```
-
-### Adjust Game Canvas Size
-Edit `GameServer.java` (lines ~20-21):
-```java
-private static final int GAME_WIDTH = 500;   // Default: 400
-private static final int GAME_HEIGHT = 700;  // Default: 600
-```
-
-## Troubleshooting
-
-### Port Already in Use
-If port 8000 is busy, modify `GameServer.java`:
-```java
-server = HttpServer.create(new InetSocketAddress(8001), 0);  // Change to 8001
-```
-
-### Compilation Errors
-- Ensure Java JDK is installed: `java -version`
-- Check file paths are correct
-- Make sure you're in the project root directory
-
-### Game Not Loading
-- Check browser console for errors (F12)
-- Verify server is running on http://localhost:8000
-- Clear browser cache (Ctrl+Shift+Delete)
-- Try a different browser
-
-### Obstacles Not Moving
-- Ensure `game.js` is properly loaded (check Network tab in F12)
-- Check browser console for fetch errors
-- Verify API endpoints are working
-
-## Future Enhancements
-
-- [ ] Sound effects and background music
-- [ ] Power-ups (shield, slow-motion, speed boost)
-- [ ] Different car skins
-- [ ] Leaderboard system
-- [ ] Different game modes (time attack, survival)
-- [ ] Particle effects on collision
-- [ ] Mobile app version
-- [ ] Multiplayer support
-
-## Performance
-
-- **Frame Rate**: 60 FPS using `requestAnimationFrame`
-- **Server Response**: ~10-20ms per API call
-- **Memory Usage**: Minimal, with efficient game loop
-- **Browser Compatibility**: Chrome, Firefox, Safari, Edge (2020+)
-
-## License
-
-This project is free to use and modify for educational and personal purposes.
-
-## Credits
-
-Made with ❤️ for game enthusiasts everywhere!
-
----
-
-**Enjoy the game and happy dodging! 🏎️**
-"# car" 
+- **Backend**: FastAPI, LangChain, OpenAI GPT, FAISS, JWT
+- **Frontend**: Flask, HTML5, CSS3
+- **AI/ML**: Retrieval-Augmented Generation, Vector Embeddings
